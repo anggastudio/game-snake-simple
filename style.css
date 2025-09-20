@@ -21,11 +21,15 @@ body {
     text-align: center;
     max-width: 800px;
     width: 100%;
+    display: flex;              /* baru */
+    flex-direction: column;     /* baru */
+    align-items: center;        /* baru */
 }
 
 /* Header */
 .game-header {
     margin-bottom: 20px;
+    order: 1; /* urutan global */
 }
 
 .game-header h1 {
@@ -57,6 +61,7 @@ body {
     position: relative;
     display: inline-block;
     margin-bottom: 20px;
+    order: 3; /* urutan global */
 }
 
 #gameCanvas {
@@ -162,6 +167,7 @@ body {
 /* Game Controls */
 .game-controls {
     margin-bottom: 30px;
+    order: 2; /* urutan global */
 }
 
 /* Instructions */
@@ -172,6 +178,7 @@ body {
     border: 2px solid #991B1B;
     max-width: 600px;
     margin: 0 auto;
+    order: 5; /* di bawah canvas/dpad */
 }
 
 .instructions h3 {
@@ -296,8 +303,9 @@ body {
     
     .score-display {
         font-size: 1rem;
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row;            /* sebelumnya column */
+        justify-content: space-between; /* agar rapi satu baris */
+        gap: 12px;
     }
     
     #gameCanvas {
@@ -345,33 +353,66 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .game-header h1 {
-        font-size: 2rem;
-    }
+    /* Urutan: 1) Judul, 2) Skor satu baris, 3) Tombol, 4) Snake Area, 5) D-pad (mobile) / Cara Bermain (desktop) */
+    .game-header { order: 1; }
+    .game-controls { order: 3; margin: 16px 0; }
+    .game-area { order: 4; }
+    .instructions { order: 5; }
+    .mobile-controls { order: 5; }
     
+    /* Pastikan skor selalu satu baris di semua perangkat */
     .score-display {
-        flex-direction: column;
-        gap: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      max-width: 600px;
     }
     
-    #gameCanvas {
-        width: 100%;
-        max-width: 400px;
-        height: auto;
+    /* Desktop: tampilkan Cara Bermain, sembunyikan D-pad */
+    @media (min-width: 769px) {
+      .instructions { display: block !important; }
+      .mobile-controls { display: none !important; }
     }
     
-    .btn {
-        font-size: 0.9rem;
-        padding: 10px 20px;
-        margin: 5px;
+    /* Mobile: tampilkan D-pad di bawah canvas (bukan fixed), sembunyikan Cara Bermain */
+    @media (max-width: 768px) {
+      .instructions { display: none !important; }
+      .mobile-controls {
+        display: block !important;
+        position: static;            /* override dari posisi fixed */
+        left: auto;                  /* reset */
+        bottom: auto;                /* reset */
+        transform: none;             /* reset */
+        margin-top: 12px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      }
     }
-    
-    .key-controls {
-        flex-direction: column;
-        gap: 10px;
-    }
+    /* ==== End Final Layout Overrides ==== */
 }
 
+.key {
+    display: inline-block;
+    background: #DC2626;
+    color: #FFFFFF;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 35px;
+    text-align: center;
+    border: 2px solid #991B1B;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.or {
+    color: #9CA3AF;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
 @media (max-width: 480px) {
     .game-header h1 {
         font-size: 1.5rem;
