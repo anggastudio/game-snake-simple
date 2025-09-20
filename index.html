@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game - Tema Merah</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1>Snake Game</h1>
+            <div class="score-display">
+                <div class="current-score">
+                    <span>Skor: </span>
+                    <span id="score">0</span>
+                </div>
+                <div class="high-score">
+                    <span>Tertinggi: </span>
+                    <span id="highScore">0</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="game-area">
+            <canvas id="gameCanvas" width="600" height="400"></canvas>
+            
+            <!-- Game Over Modal -->
+            <div id="gameOverModal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>Game Over!</h2>
+                    <p>Skor Akhir: <span id="finalScore">0</span></p>
+                    <p>Skor Tertinggi: <span id="modalHighScore">0</span></p>
+                    <button id="restartBtn" class="btn btn-primary">Main Lagi</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-controls">
+            <button id="startBtn" class="btn btn-primary">Mulai</button>
+            <button id="pauseBtn" class="btn btn-secondary">Pause</button>
+            <button id="resetBtn" class="btn btn-danger">Reset</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>Cara Bermain:</h3>
+            <p>Gunakan tombol panah atau WASD untuk menggerakkan ular</p>
+            <div class="key-controls">
+                <div class="key-group">
+                    <span class="key">↑</span>
+                    <span class="key">↓</span>
+                    <span class="key">←</span>
+                    <span class="key">→</span>
+                </div>
+                <span class="or">atau</span>
+                <div class="key-group">
+                    <span class="key">W</span>
+                    <span class="key">S</span>
+                    <span class="key">A</span>
+                    <span class="key">D</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="game.js"></script>
+</body>
+</html>

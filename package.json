@@ -1,0 +1,36 @@
+{
+  "name": "snake-game-simple",
+  "version": "1.0.0",
+  "description": "A simple snake game with dominant red color theme built with HTML5 Canvas and vanilla JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'No build process needed for static files'",
+    "deploy": "echo 'Ready for deployment to static hosting platforms'"
+  },
+  "keywords": [
+    "snake-game",
+    "html5-canvas",
+    "javascript",
+    "game",
+    "red-theme",
+    "browser-game"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/snake-game-simple.git"
+  },
+  "homepage": "https://yourusername.github.io/snake-game-simple",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "index.html",
+    "style.css",
+    "game.js",
+    "README.md"
+  ]
+}
