@@ -36,12 +36,29 @@ let gameState = {
 let canvas, ctx;
 let scoreElement, highScoreElement, finalScoreElement, modalHighScoreElement;
 let startBtn, pauseBtn, resetBtn, restartBtn, gameOverModal;
+let mobileControls, upBtn, downBtn, leftBtn, rightBtn;
 
 // Game Loop
 let gameInterval;
 
+// Mobile Detection
+let isMobile = false;
+
+// Mobile Device Detection
+function detectMobile() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    const touchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const smallScreen = window.innerWidth <= 768;
+    
+    return mobileRegex.test(userAgent) || touchDevice || smallScreen;
+}
+
 // Initialize Game
 function initGame() {
+    // Detect mobile device
+    isMobile = detectMobile();
+    
     // Get DOM elements
     canvas = document.getElementById('gameCanvas');
     ctx = canvas.getContext('2d');
@@ -57,6 +74,13 @@ function initGame() {
     restartBtn = document.getElementById('restartBtn');
     gameOverModal = document.getElementById('gameOverModal');
     
+    // Mobile control elements
+    mobileControls = document.getElementById('mobileControls');
+    upBtn = document.getElementById('upBtn');
+    downBtn = document.getElementById('downBtn');
+    leftBtn = document.getElementById('leftBtn');
+    rightBtn = document.getElementById('rightBtn');
+    
     // Set canvas size
     canvas.width = GAME_CONFIG.CANVAS_WIDTH;
     canvas.height = GAME_CONFIG.CANVAS_HEIGHT;
@@ -66,6 +90,9 @@ function initGame() {
     
     // Setup event listeners
     setupEventListeners();
+    
+    // Setup mobile controls
+    setupMobileControls();
     
     // Initial render
     render();
@@ -82,6 +109,87 @@ function setupEventListeners() {
     
     // Keyboard events
     document.addEventListener('keydown', handleKeyPress);
+}
+
+// Mobile Controls Setup
+function setupMobileControls() {
+    if (isMobile && mobileControls) {
+        // Show mobile controls
+        mobileControls.classList.remove('hidden');
+        
+        // Add touch event listeners
+        upBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleMobileInput('UP');
+        });
+        
+        downBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleMobileInput('DOWN');
+        });
+        
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleMobileInput('LEFT');
+        });
+        
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleMobileInput('RIGHT');
+        });
+        
+        // Also add click events as fallback
+        upBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleMobileInput('UP');
+        });
+        
+        downBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleMobileInput('DOWN');
+        });
+        
+        leftBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleMobileInput('LEFT');
+        });
+        
+        rightBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleMobileInput('RIGHT');
+        });
+    } else if (mobileControls) {
+        // Hide mobile controls on desktop
+        mobileControls.classList.add('hidden');
+    }
+}
+
+// Mobile Input Handler
+function handleMobileInput(direction) {
+    if (!gameState.isRunning || gameState.gameOver || gameState.isPaused) return;
+    
+    switch (direction) {
+        case 'UP':
+            if (gameState.direction !== 'DOWN') {
+                gameState.nextDirection = 'UP';
+            }
+            break;
+        case 'DOWN':
+            if (gameState.direction !== 'UP') {
+                gameState.nextDirection = 'DOWN';
+            }
+            break;
+        case 'LEFT':
+            if (gameState.direction !== 'RIGHT') {
+                gameState.nextDirection = 'LEFT';
+            }
+            break;
+        case 'RIGHT':
+            if (gameState.direction !== 'LEFT') {
+                gameState.nextDirection = 'RIGHT';
+            }
+            break;
+    }
 }
 
 // Keyboard Input Handler
@@ -438,6 +546,15 @@ document.addEventListener('DOMContentLoaded', initGame);
 
 // Handle window resize
 window.addEventListener('resize', () => {
+    // Re-detect mobile on resize
+    const wasMobile = isMobile;
+    isMobile = detectMobile();
+    
+    // Update mobile controls visibility if detection changed
+    if (wasMobile !== isMobile) {
+        setupMobileControls();
+    }
+    
     // Maintain canvas aspect ratio on mobile
     if (window.innerWidth <= 768) {
         const container = canvas.parentElement;
