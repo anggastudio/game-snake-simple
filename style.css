@@ -222,6 +222,7 @@ body {
     border-radius: 15px;
     border: 2px solid #DC2626;
     box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+    touch-action: none; /* cegah scroll saat menahan tombol */
 }
 
 .dpad-middle {
@@ -246,6 +247,27 @@ body {
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
+}
+
+/* Hapus gaya bawaan tombol pada iOS/Android agar tidak tampil seperti tombol putih default */
+.dpad-btn, .btn {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    font: inherit;
+}
+
+.dpad-btn:focus, .btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25) inset;
+}
+/* Pastikan tombol DPAD terpusat dan responsif pada perangkat sentuh */
+.dpad-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
 }
 
 .dpad-btn:active {
@@ -293,6 +315,7 @@ body {
     
     .mobile-controls {
         display: block;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom)); /* aman untuk notch */
     }
     
     .mobile-controls.hidden {
@@ -361,6 +384,26 @@ body {
     
     .instructions {
         padding: 15px;
+    }
+
+    /* Penyesuaian ukuran DPAD untuk layar kecil */
+    .dpad {
+        gap: 8px;
+        padding: 12px;
+    }
+    .dpad-middle {
+        gap: 8px;
+    }
+    .dpad-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 20px;
+        border-radius: 14px;
+    }
+    .dpad-center {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
     }
 }
 
