@@ -111,53 +111,31 @@ function setupEventListeners() {
     document.addEventListener('keydown', handleKeyPress);
 }
 
+// Helper to bind directional buttons safely (no duplicate handlers)
+function bindDirectionalButton(button, direction) {
+    if (!button || button.dataset.bound === 'true') return;
+    const handler = (e) => { e.preventDefault(); handleMobileInput(direction); };
+    // Prefer pointer events, with touch/click fallbacks
+    if (window.PointerEvent) {
+        button.addEventListener('pointerdown', handler, { passive: false });
+    }
+    button.addEventListener('touchstart', handler, { passive: false });
+    button.addEventListener('click', handler);
+    // Mark as bound to avoid duplicates on re-setup
+    button.dataset.bound = 'true';
+}
+
 // Mobile Controls Setup
 function setupMobileControls() {
     if (isMobile && mobileControls) {
         // Show mobile controls
         mobileControls.classList.remove('hidden');
-        
-        // Add touch event listeners
-        upBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleMobileInput('UP');
-        });
-        
-        downBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleMobileInput('DOWN');
-        });
-        
-        leftBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleMobileInput('LEFT');
-        });
-        
-        rightBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleMobileInput('RIGHT');
-        });
-        
-        // Also add click events as fallback
-        upBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            handleMobileInput('UP');
-        });
-        
-        downBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            handleMobileInput('DOWN');
-        });
-        
-        leftBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            handleMobileInput('LEFT');
-        });
-        
-        rightBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            handleMobileInput('RIGHT');
-        });
+
+        // Bind buttons (once)
+        bindDirectionalButton(upBtn, 'UP');
+        bindDirectionalButton(downBtn, 'DOWN');
+        bindDirectionalButton(leftBtn, 'LEFT');
+        bindDirectionalButton(rightBtn, 'RIGHT');
     } else if (mobileControls) {
         // Hide mobile controls on desktop
         mobileControls.classList.add('hidden');
