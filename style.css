@@ -354,17 +354,23 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     /* Urutan: 1) Judul, 2) Skor satu baris, 3) Tombol, 4) Snake Area, 5) D-pad (mobile) / Cara Bermain (desktop) */
+    /* ===== Final Cascade Overrides: Urutan Layout Global ===== */
+    /* 1. Judul (dan skor di dalam header)
+       2. —
+       3. Tombol Mulai/Pause/Reset
+       4. Snake Area (Canvas)
+       5. D-pad untuk Mobile, "Cara Bermain" untuk Desktop */
     .game-header { order: 1; }
-    .game-controls { order: 3; margin: 16px 0; }
-    .game-area { order: 4; }
+    .game-controls { order: 2; margin: 16px 0; }
+    .game-area { order: 3; }
     .instructions { order: 5; }
     .mobile-controls { order: 5; }
     
-    /* Pastikan skor selalu satu baris di semua perangkat */
+    /* Skor & Tertinggi selalu satu baris */
     .score-display {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between !important;
       gap: 12px;
       width: 100%;
       max-width: 600px;
@@ -376,20 +382,20 @@ body {
       .mobile-controls { display: none !important; }
     }
     
-    /* Mobile: tampilkan D-pad di bawah canvas (bukan fixed), sembunyikan Cara Bermain */
+    /* Mobile: tampilkan D-pad tepat di bawah canvas (bukan fixed), sembunyikan Cara Bermain */
     @media (max-width: 768px) {
       .instructions { display: none !important; }
       .mobile-controls {
         display: block !important;
-        position: static;            /* override dari posisi fixed */
-        left: auto;                  /* reset */
-        bottom: auto;                /* reset */
-        transform: none;             /* reset */
+        position: static !important;  /* override dari posisi fixed */
+        left: auto !important;
+        bottom: auto !important;
+        transform: none !important;
         margin-top: 12px;
         padding-bottom: calc(12px + env(safe-area-inset-bottom));
       }
     }
-    /* ==== End Final Layout Overrides ==== */
+    /* ===== End Final Cascade Overrides ===== */
 }
 
 .key {
@@ -464,3 +470,39 @@ body {
 .pulse {
     animation: pulse 1s infinite;
 }
+/* ===== Alignment & Width Sync with Canvas ===== */
+/* Gunakan variabel agar semua baris (skor, tombol, instruksi/D-pad) memiliki lebar yang sama dengan canvas */
+.game-container { --game-width: 600px; }
+@media (max-width: 768px) {
+  .game-container { --game-width: min(100%, 400px); }
+}
+
+/* Samakan lebar dan posisi dengan canvas */
+.game-area { width: var(--game-width) !important; margin-left: auto; margin-right: auto; }
+#gameCanvas { width: 100% !important; height: auto !important; }
+.score-display, .game-controls, .instructions, .mobile-controls {
+  width: var(--game-width) !important;
+  margin-left: auto; margin-right: auto;
+}
+
+/* Score row: selalu satu baris, beri jarak yang pas */
+.score-display {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: space-between !important;
+  column-gap: 16px !important;
+}
+
+/* Controls row: selalu satu baris sejajar dengan canvas */
+.game-controls {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  justify-content: center;
+  column-gap: 16px;
+}
+.btn { white-space: nowrap; }
+@media (max-width: 768px) {
+  .btn { font-size: 0.9rem; padding: 10px 16px; }
+}
+/* ===== End Alignment & Width Sync ===== */
